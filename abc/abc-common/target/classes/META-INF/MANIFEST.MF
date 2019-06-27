@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: abc-common
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: Administrator
+Implementation-Vendor-Id: com.abc.1902
+Build-Jdk: 1.8.0_202
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/abc/abc-common
+Created-By: Maven Integration for Eclipse
+

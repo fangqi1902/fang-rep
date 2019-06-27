@@ -1,0 +1,36 @@
+package com.abc.vo;
+
+import com.abc.vo.SysResult;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
+public class SysResult {
+	private Integer status;//200表示成功，201表示失败
+	private String msg;
+	private Object data;
+	
+	public static SysResult ok() {
+		return new SysResult(200,null,null);
+	}
+	public static SysResult ok(Object data) {
+		return new SysResult(200,null,data);
+	}
+	public static SysResult ok(Object data,String msg) {
+		return new SysResult(200,msg,data);
+	}
+	
+	public static SysResult fail(String msg) {
+		return new SysResult(201,msg,null);
+	}
+	public static SysResult fail() {
+		return new SysResult(201,null,null);
+	}
+
+}
