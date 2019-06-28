@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>Carrent</display-name>
+  <!-- 配置编码过滤器 开始 -->
+	<filter>
+		<filter-name>charset</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>charset</filter-name>
+		<!-- 只要用户请求*.action类型的url就走这个过滤器 -->
+		<!-- <url-pattern>*.action</url-pattern> -->
+		<!-- 只要用户请求 springmvc这个servlet就走过滤器 -->
+		<servlet-name>springmvc</servlet-name>
+	</filter-mapping>
+	<!-- 配置编码过滤器 结束 -->
+
+	<!-- 配置spring的监听器加载applicationContext.xml 开始 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- Spring容器加载所有的配置文件的路径 org.springframework.web.context.ContextLoader 
+		第102行 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+	<!-- 配置spring的监听器加载applicationContext.xml 结束 -->
+
+	<!-- 配置前端控制器   开始 -->
+	<servlet>
+		<servlet-name>springmvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+
+		<!-- 配置配置文件的地址 让ioc容器去解析xml 如果不相配置contextConfigLocation 那么 springmvc.xml的名字要改成springmvc-servlet.xml 
+			核心配置文件的名称必须是 前端控制器的servlet-name+-servlet.xml -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:springmvc.xml</param-value>
+		</init-param>
+		<!-- 配置servlet在tomcat启动的时候就创建对象 -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>springmvc</servlet-name>
+		<!-- <url-pattern>/*</url-pattern> *.action 所有xxxx.action的请求都交给DispatcherServlet 
+			/ 所有的请求地址都交给DispatcherServlet去解析 js css png 后面会讲restFull的编程会用到 /* 没有这种配置方法 
+			很可能产生请求死循环 <url-pattern>/</url-pattern> -->
+		<url-pattern>*.action</url-pattern>
+	</servlet-mapping>
+
+	<!-- 配置前端控制器   结束 -->
+
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>

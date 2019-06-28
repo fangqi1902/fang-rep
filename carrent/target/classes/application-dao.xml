@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 导入头文件 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+	    http://www.springframework.org/schema/context/spring-context.xsd
+	    http://www.springframework.org/schema/aop
+    	http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+	<!-- 使用spring去解析db.properties 如果properties里面有key=username的属性那么当使用${username}去取时spring默认会取当前操作系统的用户名 
+		使用 system-properties-mode="FALLBACK" 可以让username去取properties里面的值 -->
+	<context:property-placeholder location="classpath:db.properties"
+		system-properties-mode="FALLBACK" />
+
+	<!-- 配置数据源1 这个数据源是springjdbc里面自带的数据源 -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<!-- 注入数据库的连接属性 -->
+		<property name="driverClassName" value="${driverClassName}"></property>
+		<property name="url" value="${url}"></property>
+		<property name="username" value="${username}"></property>
+		<property name="password" value="${password}"></property>
+	</bean>
+
+	<!-- 创建sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 注入数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mapperLocations">
+			<array>
+				<value>classpath:com/sxt/sys/mapping/*.xml</value>
+				<value>classpath:com/sxt/bus/mapping/*.xml</value>
+			</array>
+		</property>
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageInterceptor">
+					<property name="properties">
+						<value>
+							<!-- 配置数据库言 4.0之后的PageHepler可以不用配置 -->
+							helperdialect=mysql
+							<!-- 配置分页的出处理 如果数据库里面有10页，用户传-1页 此时会查询第一页 如果用户传15页，会查询最后一页 -->
+							reasonable=true
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<!-- 配置mapper的接口 mapper接口所在包名，Spring会自动查找之中的类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 注入扫描包的路径 如果有多个包 value="com.sxt.mapper,com.bjsxt.mapper" 或者 <value> 
+			com.sxt.mapper com.bjsxt.mapper </value> -->
+		<property name="basePackage" value="com.sxt.sys.mapper,com.sxt.bus.mapper">
+		</property>
+		<!-- 注入sqlsessionFactory -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+</beans>
+        

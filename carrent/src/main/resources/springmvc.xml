@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 头文件 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<!-- 配置注解的映射和适配器 
+		mvc:annotation-driven  除了配置了注解的映射器和适配器，还加入了一些其它功能
+			如把数据转化成json之后返回给客户端
+	-->
+	<mvc:annotation-driven></mvc:annotation-driven>
+	
+	<!-- 扫描controller -->
+	<context:component-scan base-package="com.sxt.sys.controller"></context:component-scan>
+	<context:component-scan base-package="com.sxt.bus.controller"></context:component-scan>
+	
+	<!-- 视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 配置页面跳转的前缀 -->
+		<property name="prefix" value="/WEB-INF/view/"></property>
+		<!-- 配置页面跳转的后缀 -->
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!-- 文件上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!--指定文件上传过程中提交的数据库的编码  -->
+		<property name="defaultEncoding" value="utf-8"></property>
+		<!-- 配置文件上传的临时目录 -->
+		<property name="uploadTempDir" value="/upload/temp"></property>
+		<!-- 配置传文件的最大值   20M-->
+		<property name="maxUploadSize" value="20971520"></property>
+	</bean>
+	
+	<!-- 拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<!-- 配置需要拦截的路径 -->
+			<mvc:mapping path="/**"/>
+			<!-- 配置哪些地址不拦截 -->
+			<mvc:exclude-mapping path="/login/toLogin*"/>
+			<mvc:exclude-mapping path="/login/login*"/>
+			<!-- 使用的拦截器对象 -->
+			<bean class="com.sxt.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors> 
+</beans>
