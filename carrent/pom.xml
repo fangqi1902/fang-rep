@@ -26,7 +26,7 @@
 		<ueditor.version>1.0</ueditor.version>
 		<commons.version>2.4</commons.version>
 		<redis.version>2.9.0</redis.version>
-		<fastjson.version>1.2.47</fastjson.version>
+		<fastjson.version>1.2.83</fastjson.version>
 	</properties>
 	<dependencies>
 		<!-- 配置依赖 -->
